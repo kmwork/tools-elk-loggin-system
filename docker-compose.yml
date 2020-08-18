@@ -2,6 +2,7 @@ version: '3.2'
 
 services:
   elasticsearch:
+    restart: always
     build:
       context: elasticsearch/
       args:
@@ -27,11 +28,13 @@ services:
       - elk
 
   zookeeper:
+    restart: always
     image: wurstmeister/zookeeper
     expose:
       - "2181"
 
   kafka:
+    restart: always
     image: wurstmeister/kafka
     depends_on:
       - zookeeper
@@ -54,6 +57,7 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
 
   logstash:
+    restart: always
     build:
       context: logstash/
       args:
@@ -81,7 +85,9 @@ services:
       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
     links:
       - elasticsearch
+
   kibana:
+    restart: always
     build:
       context: kibana/
       args:
