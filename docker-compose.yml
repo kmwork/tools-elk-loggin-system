@@ -27,12 +27,12 @@ services:
       - elk
 
   zookeeper:
-    image: wurstmeister/zookeeper:lastest
+    image: wurstmeister/zookeeper
     expose:
       - "2181"
 
   kafka:
-    image: wurstmeister/kafka:lastest
+    image: wurstmeister/kafka
     depends_on:
       - zookeeper
     ports:
