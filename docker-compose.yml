@@ -19,11 +19,10 @@ services:
       - "9200:9200"
       - "9300:9300"
     environment:
-      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
-      ELASTIC_PASSWORD: changeme
-      # Use single node discovery in order to disable production mode and avoid bootstrap checks
-      # see https://www.elastic.co/guide/en/elasticsearch/reference/current/bootstrap-checks.html
-      discovery.type: single-node
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
   zookeeper:
     restart: always
     image: wurstmeister/zookeeper
@@ -52,7 +51,10 @@ services:
       - elasticsearch
       - zookeeper
   logstash:
-    restart: always
+    volumes:
+      - "./logstash.conf:/logstash/pipeline/logstash.conf"
+      restart: always
+      command: logstash -f /logstash/pipeline/logstash.conf
     build:
       context: logstash/
       args:
