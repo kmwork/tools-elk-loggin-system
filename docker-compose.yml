@@ -2,27 +2,17 @@ version: '3.2'
 
 services:
   elasticsearch:
+    image: elasticsearch:$ELK_VERSION
     restart: always
     build:
       context: elasticsearch/
       args:
         ELK_VERSION: $ELK_VERSION
-    volumes:
-      - type: bind
-        source: ./elasticsearch/config/elasticsearch.yml
-        target: /usr/share/elasticsearch/config/elasticsearch.yml
-        read_only: true
-      - type: volume
-        source: elasticsearch
-        target: /usr/share/elasticsearch/data
     ports:
       - "9200:9200"
       - "9300:9300"
-    environment:
-      - cluster.name=docker-cluster
-      - bootstrap.memory_lock=true
-      - xpack.security.enabled=false
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    volumes:
+      - ./esdata:/usr/share/elasticsearch/data
   zookeeper:
     restart: always
     image: wurstmeister/zookeeper
@@ -51,10 +41,7 @@ services:
       - elasticsearch
       - zookeeper
   logstash:
-    volumes:
-      - "./logstash.conf:/logstash/pipeline/logstash.conf"
-      restart: always
-      command: logstash -f /logstash/pipeline/logstash.conf
+    restart: always
     build:
       context: logstash/
       args:
@@ -83,14 +70,8 @@ services:
       - kafka
 
   kibana:
+    image: kibana:$ELK_VERSION
     restart: always
-    build:
-      context: kibana/
-    volumes:
-      - type: bind
-        source: ./kibana/config/kibana.yml
-        target: /usr/share/kibana/config/kibana.yml
-        read_only: true
     ports:
       - "5601:5601"
     links:
