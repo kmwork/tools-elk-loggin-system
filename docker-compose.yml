@@ -2,17 +2,29 @@ version: '3.2'
 
 services:
   elasticsearch:
-    image: elasticsearch:$ELK_VERSION
-    restart: always
     build:
       context: elasticsearch/
       args:
         ELK_VERSION: $ELK_VERSION
+    volumes:
+      - type: bind
+        source: ./elasticsearch/config/elasticsearch.yml
+        target: /usr/share/elasticsearch/config/elasticsearch.yml
+        read_only: true
+      - type: volume
+        source: elasticsearch
+        target: /usr/share/elasticsearch/data
     ports:
       - "9200:9200"
       - "9300:9300"
-    volumes:
-      - ./esdata:/usr/share/elasticsearch/data
+    environment:
+      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+      ELASTIC_PASSWORD: changeme
+      # Use single node discovery in order to disable production mode and avoid bootstrap checks
+      # see https://www.elastic.co/guide/en/elasticsearch/reference/current/bootstrap-checks.html
+      discovery.type: single-node
+    networks:
+      - elk
   zookeeper:
     restart: always
     image: wurstmeister/zookeeper
@@ -37,9 +49,8 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,OUTSIDE:PLAINTEXT
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-    links:
-      - elasticsearch
-      - zookeeper
+    networks:
+      - elk
   logstash:
     restart: always
     build:
@@ -65,22 +76,25 @@ services:
     environment:
       BOOTSTRAP_SERVERS: "kafka:9094"
       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
-    links:
-      - elasticsearch
-      - kafka
-
+    networks:
+      - elk
   kibana:
     image: kibana:$ELK_VERSION
     restart: always
     ports:
       - "5601:5601"
-    links:
-      - elasticsearch
     depends_on:
       - elasticsearch
+    networks:
+      - elk
+
+networks:
+  elk:
+    driver: bridge
 
 volumes:
   elasticsearch:
+    driver: local
   zookeeper_data:
     driver: local
   kafka_data:
