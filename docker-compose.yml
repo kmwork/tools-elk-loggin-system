@@ -34,6 +34,8 @@ services:
       - 'zookeeper_data:/datana'
     environment:
       - ALLOW_ANONYMOUS_LOGIN=yes
+    networks:
+      - elk
   kafka:
     restart: always
     image: wurstmeister/kafka
