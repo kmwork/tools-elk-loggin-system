@@ -28,6 +28,8 @@ services:
   zookeeper:
     restart: always
     image: wurstmeister/zookeeper
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
     expose:
       - "2181"
     networks:
