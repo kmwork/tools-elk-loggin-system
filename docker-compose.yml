@@ -39,7 +39,7 @@ services:
       - ./zk-single-kafka-single/zoo1/datalog:/datalog
 
   kafka1:
-    image: confluentinc/cp-kafka:5.5.1
+    image: wurstmeister/kafka
     hostname: kafka1
     ports:
       - "9092:9092"
@@ -51,6 +51,7 @@ services:
       KAFKA_BROKER_ID: 1
       KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_CREATE_TOPICS: "tag_logs:1:1"
     volumes:
       - ./zk-single-kafka-single/kafka1/data:/var/lib/kafka/data
     depends_on:
@@ -118,7 +119,7 @@ services:
       - "5000:5000/udp"
       - "9600:9600"
     depends_on:
-      - kafka
+      - kafka1
       - elasticsearch
     environment:
       BOOTSTRAP_SERVERS: "kafka1:19092"
