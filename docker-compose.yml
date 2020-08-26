@@ -25,7 +25,7 @@ services:
       # see https://www.elastic.co/guide/en/elasticsearch/reference/current/bootstrap-checks.html
       discovery.type: single-node
     networks:
-      - elk
+      - network_elk
   zoo1:
     restart: always
     image: wurstmeister/zookeeper
@@ -35,7 +35,7 @@ services:
       - ./zk-single-kafka-single/zoo1/data:/data
       - ./zk-single-kafka-single/zoo1/datalog:/datalog
     networks:
-      - elk
+      - network_kafka
 
   kafka1:
     image: wurstmeister/kafka
@@ -51,15 +51,16 @@ services:
         KAFKA_BROKER_ID: 1
         KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
         KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-        KAFKA_CREATE_TOPICS: "tag_logs"
+        KAFKA_CREATE_TOPICS: "tag_logs:1:1"
         KAFKA_LISTENER_NAME: PLAINTEXT
         ALLOW_PLAINTEXT_LISTENER: "yes"
+        KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
     volumes:
       - ./zk-single-kafka-single/kafka1/data:/var/lib/kafka/data
     depends_on:
       - zoo1
     networks:
-      - elk
+      - network_kafka
   logstash:
     image: logstash:$ELK_VERSION
     restart: always
@@ -87,7 +88,8 @@ services:
       BOOTSTRAP_SERVERS: "kafka1:19092"
       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
     networks:
-      - elk
+      - network_elk
+      - network_kafka
   kibana:
     image: kibana:$ELK_VERSION
     restart: always
@@ -105,12 +107,13 @@ services:
     depends_on:
       - elasticsearch
     networks:
-      - elk
+      - network_elk
 
 networks:
-  elk:
+  network_elk:
     driver: bridge
-
+  network_kafka:
+    driver: bridge
 volumes:
   elasticsearch:
     driver: local
