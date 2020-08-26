@@ -38,6 +38,8 @@ services:
     volumes:
       - ./zk-single-kafka-single/zoo1/data:/data
       - ./zk-single-kafka-single/zoo1/datalog:/datalog
+    networks:
+      - elk
 
   kafka1:
     image: wurstmeister/kafka
