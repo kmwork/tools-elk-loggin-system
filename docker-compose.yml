@@ -27,14 +27,10 @@ services:
     networks:
       - elk
   zoo1:
-    image: zookeeper:3.6.1
-    hostname: zoo1
-    ports:
-      - "2181:2181"
-    environment:
-      ZOO_MY_ID: 1
-      ZOO_PORT: 2181
-      ZOO_SERVERS: server.1=zoo1:2888:3888
+    restart: always
+    image: wurstmeister/zookeeper
+    expose:
+      - "2181"
     volumes:
       - ./zk-single-kafka-single/zoo1/data:/data
       - ./zk-single-kafka-single/zoo1/datalog:/datalog
@@ -55,7 +51,7 @@ services:
         KAFKA_BROKER_ID: 1
         KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
         KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-        KAFKA_CREATE_TOPICS: "tag_logs:1:1"
+        KAFKA_CREATE_TOPICS: "tag_logs"
         KAFKA_LISTENER_NAME: PLAINTEXT
         ALLOW_PLAINTEXT_LISTENER: "yes"
     volumes:
