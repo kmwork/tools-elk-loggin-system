@@ -1,5 +1,5 @@
 version: '3.2'
-
+## система логов в докерах
 services:
   elasticsearch:
     image: elasticsearch:$ELK_VERSION
