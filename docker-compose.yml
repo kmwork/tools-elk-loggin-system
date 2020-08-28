@@ -41,12 +41,8 @@ services:
         read_only: true
       - type: bind
         source: ./logstash/pipeline/10_dev_stand.conf
-        target: /usr/share/logstash/pipeline
+        target: /usr/share/logstash/pipeline/logstash.conf
         read_only: true
-    ports:
-      - "5000:5000/tcp"
-      - "5000:5000/udp"
-      - "9600:9600"
     depends_on:
       - elasticsearch
     environment:
@@ -68,12 +64,8 @@ services:
         read_only: true
       - type: bind
         source: ./logstash/pipeline/20_test_stand.conf
-        target: /usr/share/logstash/pipeline
+        target: /usr/share/logstash/pipeline/logstash.conf
         read_only: true
-    ports:
-      - "5000:5000/tcp"
-      - "5000:5000/udp"
-      - "9600:9600"
     depends_on:
       - elasticsearch
     environment:
