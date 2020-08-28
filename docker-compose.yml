@@ -48,7 +48,6 @@ services:
       - "5000:5000/udp"
       - "9600:9600"
     depends_on:
-      - kafka1
       - elasticsearch
     environment:
       BOOTSTRAP_SERVERS: "worker1.datana.ru:9092"
@@ -76,7 +75,6 @@ services:
       - "5000:5000/udp"
       - "9600:9600"
     depends_on:
-      - kafka1
       - elasticsearch
     environment:
       BOOTSTRAP_SERVERS: "worker2.datana.ru:9092"
