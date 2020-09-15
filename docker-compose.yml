@@ -26,7 +26,7 @@ services:
       discovery.type: single-node
     networks:
       - network_elk
-## ============== под разработку DEV стенд (logstash) ==============
+  ## ============== под разработку DEV стенд (logstash) ==============
   logstash_dev:
     image: logstash:$ELK_VERSION
     restart: always
@@ -54,7 +54,7 @@ services:
       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
     networks:
       - network_elk
-## ============== под ручное тестирование Test стенд (logstash) ==============
+  ## ============== под ручное тестирование Test стенд (logstash) ==============
   logstash_test:
     image: logstash:$ELK_VERSION
     restart: always
@@ -108,6 +108,7 @@ services:
       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
     networks:
       - network_elk
+  ## ============== Kibana (веб морда) ==============
   kibana:
     image: kibana:$ELK_VERSION
     restart: always
