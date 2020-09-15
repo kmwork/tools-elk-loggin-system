@@ -81,33 +81,33 @@ services:
       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
     networks:
       - network_elk
-    ## ============== под авто-тестинг AutoTest стенд (logstash) ==============
-    logstash_autotest:
-      image: logstash:$ELK_VERSION
-      restart: always
-      build:
-        context: logstash_autotest/
-        args:
-          ELK_VERSION: $ELK_VERSION
-          AUTO_TEST_KAFKA_TOPIC_NAME: $AUTO_TEST_KAFKA_TOPIC_NAME
-          AUTO_TEST_KAFKA_ADDRESS: $AUTO_TEST_KAFKA_ADDRESS
-          AUTO_TEST_ELK_INDEX_PATTERN: $AUTO_TEST_ELK_INDEX_PATTERN
-      volumes:
-        - type: bind
-          source: ./logstash/config/autotest_logstash.yml
-          target: /usr/share/logstash/config/logstash.yml
-          read_only: true
-        - type: bind
-          source: ./logstash/pipeline/autotest_logstash_stand.conf
-          target: /usr/share/logstash/pipeline/logstash.conf
-          read_only: true
-      depends_on:
-        - elasticsearch
-      environment:
-        BOOTSTRAP_SERVERS: $AUTO_TEST_KAFKA_ADDRESS
-        LS_JAVA_OPTS: "-Xmx256m -Xms256m"
-      networks:
-        - network_elk
+  ## ============== под авто-тестинг AutoTest стенд (logstash) ==============
+  logstash_autotest:
+    image: logstash:$ELK_VERSION
+    restart: always
+    build:
+      context: logstash_autotest/
+      args:
+        ELK_VERSION: $ELK_VERSION
+        AUTO_TEST_KAFKA_TOPIC_NAME: $AUTO_TEST_KAFKA_TOPIC_NAME
+        AUTO_TEST_KAFKA_ADDRESS: $AUTO_TEST_KAFKA_ADDRESS
+        AUTO_TEST_ELK_INDEX_PATTERN: $AUTO_TEST_ELK_INDEX_PATTERN
+    volumes:
+      - type: bind
+        source: ./logstash/config/autotest_logstash.yml
+        target: /usr/share/logstash/config/logstash.yml
+        read_only: true
+      - type: bind
+        source: ./logstash/pipeline/autotest_logstash_stand.conf
+        target: /usr/share/logstash/pipeline/logstash.conf
+        read_only: true
+    depends_on:
+      - elasticsearch
+    environment:
+      BOOTSTRAP_SERVERS: $AUTO_TEST_KAFKA_ADDRESS
+      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+    networks:
+      - network_elk
   kibana:
     image: kibana:$ELK_VERSION
     restart: always
