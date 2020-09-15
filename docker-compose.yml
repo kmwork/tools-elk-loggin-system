@@ -40,7 +40,7 @@ services:
         target: /usr/share/logstash/config/logstash.yml
         read_only: true
       - type: bind
-        source: ./logstash/pipeline/10_dev_stand.conf
+        source: ./logstash/pipeline/dev_logstash_stand.conf
         target: /usr/share/logstash/pipeline/logstash.conf
         read_only: true
     depends_on:
@@ -63,7 +63,7 @@ services:
         target: /usr/share/logstash/config/logstash.yml
         read_only: true
       - type: bind
-        source: ./logstash/pipeline/20_test_stand.conf
+        source: ./logstash/pipeline/test_logstash_stand.conf
         target: /usr/share/logstash/pipeline/logstash.conf
         read_only: true
     depends_on:
