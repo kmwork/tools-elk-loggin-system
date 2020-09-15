@@ -34,6 +34,15 @@ services:
       context: logstash/
       args:
         ELK_VERSION: $ELK_VERSION
+
+        DEV_KAFKA_TOPIC_NAME: $DEV_KAFKA_TOPIC_NAME
+        DEV_KAFKA_ADDRESS: $DEV_KAFKA_ADDRESS
+        DEV_ELK_INDEX_PATTERN: $DEV_ELK_INDEX_PATTERN
+
+        TEST_KAFKA_TOPIC_NAME: $TEST_KAFKA_TOPIC_NAME
+        TEST_KAFKA_ADDRESS: $TEST_KAFKA_ADDRESS
+        TEST_ELK_INDEX_PATTERN: $TEST_ELK_INDEX_PATTERN
+
     volumes:
       - type: bind
         source: ./logstash/config/logstash.yml
@@ -46,7 +55,7 @@ services:
     depends_on:
       - elasticsearch
     environment:
-      BOOTSTRAP_SERVERS: "${DEV_KAFKA_ADDRESS}"
+      BOOTSTRAP_SERVERS: $DEV_KAFKA_ADDRESS
       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
     networks:
       - network_elk
@@ -57,6 +66,14 @@ services:
       context: logstash/
       args:
         ELK_VERSION: $ELK_VERSION
+
+        DEV_KAFKA_TOPIC_NAME: $DEV_KAFKA_TOPIC_NAME
+        DEV_KAFKA_ADDRESS: $DEV_KAFKA_ADDRESS
+        DEV_ELK_INDEX_PATTERN: $DEV_ELK_INDEX_PATTERN
+
+        TEST_KAFKA_TOPIC_NAME: $TEST_KAFKA_TOPIC_NAME
+        TEST_KAFKA_ADDRESS: $TEST_KAFKA_ADDRESS
+        TEST_ELK_INDEX_PATTERN: $TEST_ELK_INDEX_PATTERN
     volumes:
       - type: bind
         source: ./logstash/config/logstash.yml
@@ -69,7 +86,7 @@ services:
     depends_on:
       - elasticsearch
     environment:
-      BOOTSTRAP_SERVERS: "${TEST_KAFKA_ADDRESS}"
+      BOOTSTRAP_SERVERS: $TEST_KAFKA_ADDRESS
       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
     networks:
       - network_elk
