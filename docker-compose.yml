@@ -26,7 +26,7 @@ services:
       discovery.type: single-node
     networks:
       - network_elk
-
+## ============== под разработку DEV стенд (logstash) ==============
   logstash_dev:
     image: logstash:$ELK_VERSION
     restart: always
@@ -40,8 +40,8 @@ services:
 
     volumes:
       - type: bind
-        source: ./logstash/config/autotest_logstash.yml
-        target: /usr/share/logstash/config/autotest_logstash.yml
+        source: ./logstash/config/dev_logstash.yml
+        target: /usr/share/logstash/config/logstash.yml
         read_only: true
       - type: bind
         source: ./logstash/pipeline/dev_logstash_stand.conf
@@ -54,6 +54,7 @@ services:
       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
     networks:
       - network_elk
+## ============== под ручное тестирование Test стенд (logstash) ==============
   logstash_test:
     image: logstash:$ELK_VERSION
     restart: always
@@ -66,8 +67,8 @@ services:
         TEST_ELK_INDEX_PATTERN: $TEST_ELK_INDEX_PATTERN
     volumes:
       - type: bind
-        source: ./logstash/config/autotest_logstash.yml
-        target: /usr/share/logstash/config/autotest_logstash.yml
+        source: ./logstash/config/test_logstash.yml
+        target: /usr/share/logstash/config/logstash.yml
         read_only: true
       - type: bind
         source: ./logstash/pipeline/test_logstash_stand.conf
@@ -80,6 +81,7 @@ services:
       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
     networks:
       - network_elk
+    ## ============== под авто-тестинг AutoTest стенд (logstash) ==============
     logstash_autotest:
       image: logstash:$ELK_VERSION
       restart: always
@@ -87,22 +89,22 @@ services:
         context: logstash_autotest/
         args:
           ELK_VERSION: $ELK_VERSION
-          TEST_KAFKA_TOPIC_NAME: $TEST_KAFKA_TOPIC_NAME
-          TEST_KAFKA_ADDRESS: $TEST_KAFKA_ADDRESS
-          TEST_ELK_INDEX_PATTERN: $TEST_ELK_INDEX_PATTERN
+          AUTO_TEST_KAFKA_TOPIC_NAME: $AUTO_TEST_KAFKA_TOPIC_NAME
+          AUTO_TEST_KAFKA_ADDRESS: $AUTO_TEST_KAFKA_ADDRESS
+          AUTO_TEST_ELK_INDEX_PATTERN: $AUTO_TEST_ELK_INDEX_PATTERN
       volumes:
         - type: bind
           source: ./logstash/config/autotest_logstash.yml
-          target: /usr/share/logstash/config/dev_logstash.yml
+          target: /usr/share/logstash/config/logstash.yml
           read_only: true
         - type: bind
-          source: ./logstash/pipeline/auto_logstash_stand.conf
+          source: ./logstash/pipeline/autotest_logstash_stand.conf
           target: /usr/share/logstash/pipeline/logstash.conf
           read_only: true
       depends_on:
         - elasticsearch
       environment:
-        BOOTSTRAP_SERVERS: $TEST_KAFKA_ADDRESS
+        BOOTSTRAP_SERVERS: $AUTO_TEST_KAFKA_ADDRESS
         LS_JAVA_OPTS: "-Xmx256m -Xms256m"
       networks:
         - network_elk
