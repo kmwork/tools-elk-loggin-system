@@ -115,9 +115,8 @@ services:
     image: logstash:$ELK_VERSION
     restart: always
     build:
-      context: logstash_release/
+      context: logstash_common/
       dockerfile: ./logstash_common/Dockerfile
-
       args:
         ELK_VERSION: $ELK_VERSION
     volumes:
