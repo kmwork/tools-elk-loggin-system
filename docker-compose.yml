@@ -63,11 +63,11 @@ services:
         ELK_VERSION: $ELK_VERSION
     volumes:
       - type: bind
-        source: ./logstash_common/config/test_logstash.yml
+        source: ./logstash_common/config/common_logstash.yml
         target: /usr/share/logstash/config/logstash.yml
         read_only: true
       - type: bind
-        source: ./logstash_common/pipeline/test_logstash_stand.conf
+        source: ./logstash_common/pipeline/common_logstash_stand.conf
         target: /usr/share/logstash/pipeline/logstash.conf
         read_only: true
     depends_on:
@@ -117,11 +117,11 @@ services:
         ELK_VERSION: $ELK_VERSION
     volumes:
       - type: bind
-        source: ./logstash_common/config/production_logstash.yml
+        source: ./logstash_common/config/common_logstash.yml
         target: /usr/share/logstash/config/logstash.yml
         read_only: true
       - type: bind
-        source: ./logstash_common/pipeline/production_logstash_stand.conf
+        source: ./logstash_common/pipeline/common_logstash_stand.conf
         target: /usr/share/logstash/pipeline/logstash.conf
         read_only: true
     depends_on:
