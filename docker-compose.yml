@@ -119,9 +119,9 @@ services:
       context: logstash_autotest/
       args:
         ELK_VERSION: $ELK_VERSION
-        PRODUCTION_KAFKA_TOPIC_NAME: $PRODUCTION_KAFKA_TOPIC_NAME
-        PRODUCTION_KAFKA_ADDRESS: $PRODUCTION_KAFKA_ADDRESS
-        PRODUCTION_ELK_INDEX_PATTERN: $PRODUCTION_ELK_INDEX_PATTERN
+        RELEASE_KAFKA_TOPIC_NAME: $RELEASE_KAFKA_TOPIC_NAME
+        RELEASE_KAFKA_ADDRESS: $RELEASE_KAFKA_ADDRESS
+        RELEASE_ELK_INDEX_PATTERN: $RELEASE_ELK_INDEX_PATTERN
     volumes:
       - type: bind
         source: ./logstash_autotest/config/production_logstash.yml
