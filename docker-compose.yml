@@ -31,8 +31,8 @@ services:
     image: logstash:$ELK_VERSION
     restart: always
     build:
-      context: logstash_common/
-      dockerfile: ./logstash_common/dev.Dockerfile
+      context: logstash_dev/
+      dockerfile: ./logstash_common/Dockerfile
       args:
         ELK_VERSION: $ELK_VERSION
     volumes:
@@ -59,7 +59,8 @@ services:
     image: logstash:$ELK_VERSION
     restart: always
     build:
-      context: logstash_common/
+      context: logstash_test/
+        dockerfile: ./logstash_common/Dockerfile
       dockerfile: ./logstash_common/test.Dockerfile
       args:
         ELK_VERSION: $ELK_VERSION
@@ -87,7 +88,7 @@ services:
     image: logstash:$ELK_VERSION
     restart: always
     build:
-      context: logstash_common/
+      context: logstash_autotest/
       dockerfile: ./logstash_common/Dockerfile
       args:
         ELK_VERSION: $ELK_VERSION
@@ -111,11 +112,13 @@ services:
     networks:
       - network_elk
   ## ============== под бой Production стенд (logstash) ==============
-  logstash_production:
+  logstash_release:
     image: logstash:$ELK_VERSION
     restart: always
     build:
-      context: logstash_common/
+      context: logstash_release/
+      dockerfile: ./logstash_common/Dockerfile
+
       args:
         ELK_VERSION: $ELK_VERSION
     volumes:
