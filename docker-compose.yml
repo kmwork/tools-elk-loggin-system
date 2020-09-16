@@ -91,7 +91,7 @@ services:
       dockerfile: ./logstash_common/Dockerfile
       args:
         ELK_VERSION: $ELK_VERSION
-      volumes:
+    volumes:
       - type: bind
         source: ./logstash_autotest/config/common_logstash.yml
         target: /usr/share/logstash/config/logstash.yml
