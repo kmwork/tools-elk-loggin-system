@@ -31,14 +31,10 @@ services:
     image: logstash:$ELK_VERSION
     restart: always
     build:
-      context: logstash_dev/
+      context: logstash_common/
       dockerfile: ./logstash_common/dev.Dockerfile
       args:
         ELK_VERSION: $ELK_VERSION
-        DEV_KAFKA_TOPIC_NAME: $DEV_KAFKA_TOPIC_NAME
-        DEV_KAFKA_ADDRESS: $DEV_KAFKA_ADDRESS
-        DEV_ELK_INDEX_PATTERN: $DEV_ELK_INDEX_PATTERN
-
     volumes:
       - type: bind
         source: ./logstash_common/config/common_logstash.yml
@@ -52,6 +48,9 @@ services:
       - elasticsearch
     environment:
       BOOTSTRAP_SERVERS: $DEV_KAFKA_ADDRESS
+      KAFKA_TOPIC_NAME: $DEV_KAFKA_TOPIC_NAME
+      KAFKA_ADDRESS: $DEV_KAFKA_ADDRESS
+      ELK_INDEX_PATTERN: $DEV_ELK_INDEX_PATTERN
       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
     networks:
       - network_elk
@@ -60,13 +59,10 @@ services:
     image: logstash:$ELK_VERSION
     restart: always
     build:
-      context: logstash_test/
+      context: logstash_common/
       dockerfile: ./logstash_common/test.Dockerfile
       args:
         ELK_VERSION: $ELK_VERSION
-        TEST_KAFKA_TOPIC_NAME: $TEST_KAFKA_TOPIC_NAME
-        TEST_KAFKA_ADDRESS: $TEST_KAFKA_ADDRESS
-        TEST_ELK_INDEX_PATTERN: $TEST_ELK_INDEX_PATTERN
     volumes:
       - type: bind
         source: ./logstash_test/config/test_logstash.yml
@@ -80,6 +76,9 @@ services:
       - elasticsearch
     environment:
       BOOTSTRAP_SERVERS: $TEST_KAFKA_ADDRESS
+      KAFKA_TOPIC_NAME: $TEST_KAFKA_TOPIC_NAME
+      KAFKA_ADDRESS: $TEST_KAFKA_ADDRESS
+      ELK_INDEX_PATTERN: $TEST_ELK_INDEX_PATTERN
       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
     networks:
       - network_elk
@@ -88,14 +87,11 @@ services:
     image: logstash:$ELK_VERSION
     restart: always
     build:
-      context: logstash_autotest/
-      dockerfile: ./logstash_common/autotest.Dockerfile
+      context: logstash_common/
+      dockerfile: ./logstash_common/Dockerfile
       args:
         ELK_VERSION: $ELK_VERSION
-        AUTO_TEST_KAFKA_TOPIC_NAME: $AUTO_TEST_KAFKA_TOPIC_NAME
-        AUTO_TEST_KAFKA_ADDRESS: $AUTO_TEST_KAFKA_ADDRESS
-        AUTO_TEST_ELK_INDEX_PATTERN: $AUTO_TEST_ELK_INDEX_PATTERN
-    volumes:
+      volumes:
       - type: bind
         source: ./logstash_autotest/config/common_logstash.yml
         target: /usr/share/logstash/config/logstash.yml
@@ -108,6 +104,9 @@ services:
       - elasticsearch
     environment:
       BOOTSTRAP_SERVERS: $AUTO_TEST_KAFKA_ADDRESS
+      KAFKA_TOPIC_NAME: $AUTO_TEST_KAFKA_TOPIC_NAME
+      KAFKA_ADDRESS: $AUTO_TEST_KAFKA_ADDRESS
+      ELK_INDEX_PATTERN: $AUTO_TEST_ELK_INDEX_PATTERN
       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
     networks:
       - network_elk
@@ -116,12 +115,9 @@ services:
     image: logstash:$ELK_VERSION
     restart: always
     build:
-      context: logstash_autotest/
+      context: logstash_common/
       args:
         ELK_VERSION: $ELK_VERSION
-        RELEASE_KAFKA_TOPIC_NAME: $RELEASE_KAFKA_TOPIC_NAME
-        RELEASE_KAFKA_ADDRESS: $RELEASE_KAFKA_ADDRESS
-        RELEASE_ELK_INDEX_PATTERN: $RELEASE_ELK_INDEX_PATTERN
     volumes:
       - type: bind
         source: ./logstash_autotest/config/production_logstash.yml
@@ -134,7 +130,10 @@ services:
     depends_on:
       - elasticsearch
     environment:
-      BOOTSTRAP_SERVERS: $AUTO_TEST_KAFKA_ADDRESS
+      BOOTSTRAP_SERVERS: $RELEASE_KAFKA_ADDRESS
+      KAFKA_TOPIC_NAME: $RELEASE_KAFKA_TOPIC_NAME
+      KAFKA_ADDRESS: $RELEASE_KAFKA_ADDRESS
+      ELK_INDEX_PATTERN: $RELEASE_ELK_INDEX_PATTERN
       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
     networks:
       - network_elk
