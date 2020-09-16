@@ -31,7 +31,7 @@ services:
     image: logstash:$ELK_VERSION
     restart: always
     build:
-      context: logstash_dev/
+      context: logstash_common/
       dockerfile: ./logstash_common/Dockerfile
       args:
         ELK_VERSION: $ELK_VERSION
@@ -59,9 +59,8 @@ services:
     image: logstash:$ELK_VERSION
     restart: always
     build:
-      context: logstash_test/
-        dockerfile: ./logstash_common/Dockerfile
-      dockerfile: ./logstash_common/test.Dockerfile
+      context: logstash_common/
+      dockerfile: ./logstash_common/Dockerfile
       args:
         ELK_VERSION: $ELK_VERSION
     volumes:
@@ -88,7 +87,7 @@ services:
     image: logstash:$ELK_VERSION
     restart: always
     build:
-      context: logstash_autotest/
+      context: logstash_common/
       dockerfile: ./logstash_common/Dockerfile
       args:
         ELK_VERSION: $ELK_VERSION
