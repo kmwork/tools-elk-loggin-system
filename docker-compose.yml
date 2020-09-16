@@ -40,11 +40,11 @@ services:
 
     volumes:
       - type: bind
-        source: ./logstash/config/dev_logstash.yml
+        source: ./logstash_dev/config/dev_logstash.yml
         target: /usr/share/logstash/config/logstash.yml
         read_only: true
       - type: bind
-        source: ./logstash/pipeline/dev_logstash_stand.conf
+        source: ./logstash_dev/pipeline/dev_logstash_stand.conf
         target: /usr/share/logstash/pipeline/logstash.conf
         read_only: true
     depends_on:
@@ -67,11 +67,11 @@ services:
         TEST_ELK_INDEX_PATTERN: $TEST_ELK_INDEX_PATTERN
     volumes:
       - type: bind
-        source: ./logstash/config/test_logstash.yml
+        source: ./logstash_test/config/test_logstash.yml
         target: /usr/share/logstash/config/logstash.yml
         read_only: true
       - type: bind
-        source: ./logstash/pipeline/test_logstash_stand.conf
+        source: ./logstash_test/pipeline/test_logstash_stand.conf
         target: /usr/share/logstash/pipeline/logstash.conf
         read_only: true
     depends_on:
@@ -94,11 +94,11 @@ services:
         AUTO_TEST_ELK_INDEX_PATTERN: $AUTO_TEST_ELK_INDEX_PATTERN
     volumes:
       - type: bind
-        source: ./logstash/config/autotest_logstash.yml
+        source: ./logstash_autotest/config/autotest_logstash.yml
         target: /usr/share/logstash/config/logstash.yml
         read_only: true
       - type: bind
-        source: ./logstash/pipeline/autotest_logstash_stand.conf
+        source: ./logstash_autotest/pipeline/autotest_logstash_stand.conf
         target: /usr/share/logstash/pipeline/logstash.conf
         read_only: true
     depends_on:
