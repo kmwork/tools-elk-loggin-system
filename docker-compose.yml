@@ -32,11 +32,12 @@ services:
     restart: always
     build:
       context: logstash_dev/
+      dockerfile: ./logstash_common/dev.Dockerfile
       args:
         ELK_VERSION: $ELK_VERSION
-        DEV_KAFKA_TOPIC_NAME: $DEV_KAFKA_TOPIC_NAME
-        DEV_KAFKA_ADDRESS: $DEV_KAFKA_ADDRESS
-        DEV_ELK_INDEX_PATTERN: $DEV_ELK_INDEX_PATTERN
+        KAFKA_TOPIC_NAME: $DEV_KAFKA_TOPIC_NAME
+        KAFKA_ADDRESS: $DEV_KAFKA_ADDRESS
+        ELK_INDEX_PATTERN: $DEV_ELK_INDEX_PATTERN
 
     volumes:
       - type: bind
@@ -98,7 +99,7 @@ services:
         target: /usr/share/logstash/config/logstash.yml
         read_only: true
       - type: bind
-        source: ./logstash_autotest/pipeline/autotest_logstash_stand.conf
+        source: ./logstash_autotest/pipeline/common_logstash_stand.conf
         target: /usr/share/logstash/pipeline/logstash.conf
         read_only: true
     depends_on:
