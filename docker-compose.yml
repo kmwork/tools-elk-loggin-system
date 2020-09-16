@@ -94,11 +94,38 @@ services:
         AUTO_TEST_ELK_INDEX_PATTERN: $AUTO_TEST_ELK_INDEX_PATTERN
     volumes:
       - type: bind
-        source: ./logstash_autotest/config/autotest_logstash.yml
+        source: ./logstash_autotest/config/common_logstash.yml
         target: /usr/share/logstash/config/logstash.yml
         read_only: true
       - type: bind
         source: ./logstash_autotest/pipeline/autotest_logstash_stand.conf
+        target: /usr/share/logstash/pipeline/logstash.conf
+        read_only: true
+    depends_on:
+      - elasticsearch
+    environment:
+      BOOTSTRAP_SERVERS: $AUTO_TEST_KAFKA_ADDRESS
+      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+    networks:
+      - network_elk
+  ## ============== под бой Production стенд (logstash) ==============
+  logstash_production:
+    image: logstash:$ELK_VERSION
+    restart: always
+    build:
+      context: logstash_autotest/
+      args:
+        ELK_VERSION: $ELK_VERSION
+        PRODUCTION_KAFKA_TOPIC_NAME: $PRODUCTION_KAFKA_TOPIC_NAME
+        PRODUCTION_KAFKA_ADDRESS: $PRODUCTION_KAFKA_ADDRESS
+        PRODUCTION_ELK_INDEX_PATTERN: $PRODUCTION_ELK_INDEX_PATTERN
+    volumes:
+      - type: bind
+        source: ./logstash_autotest/config/production_logstash.yml
+        target: /usr/share/logstash/config/logstash.yml
+        read_only: true
+      - type: bind
+        source: ./logstash_autotest/pipeline/production_logstash_stand.conf
         target: /usr/share/logstash/pipeline/logstash.conf
         read_only: true
     depends_on:
