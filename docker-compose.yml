@@ -80,8 +80,8 @@ services:
       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
     networks:
       - network_elk
-  ## ============== под авто-тестинг AutoTest стенд (logstash) ==============
-  logstash_autotest:
+  ## ============== под авто-тестинга Load (AutoTest) стенд (logstash) ==============
+  logstash_load:
     image: logstash:$ELK_VERSION
     restart: always
     build:
@@ -107,8 +107,8 @@ services:
       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
     networks:
       - network_elk
-  ## ============== под бой Production стенд (logstash) ==============
-  logstash_release:
+  ## ============== под бой Production (Prod) стенд (logstash) ==============
+  logstash_prod:
     image: logstash:$ELK_VERSION
     restart: always
     build:
