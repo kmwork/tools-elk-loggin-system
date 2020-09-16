@@ -35,17 +35,17 @@ services:
       dockerfile: ./logstash_common/dev.Dockerfile
       args:
         ELK_VERSION: $ELK_VERSION
-        KAFKA_TOPIC_NAME: $DEV_KAFKA_TOPIC_NAME
-        KAFKA_ADDRESS: $DEV_KAFKA_ADDRESS
-        ELK_INDEX_PATTERN: $DEV_ELK_INDEX_PATTERN
+        DEV_KAFKA_TOPIC_NAME: $DEV_KAFKA_TOPIC_NAME
+        DEV_KAFKA_ADDRESS: $DEV_KAFKA_ADDRESS
+        DEV_ELK_INDEX_PATTERN: $DEV_ELK_INDEX_PATTERN
 
     volumes:
       - type: bind
-        source: ./logstash_dev/config/dev_logstash.yml
+        source: ./logstash_common/config/common_logstash.yml
         target: /usr/share/logstash/config/logstash.yml
         read_only: true
       - type: bind
-        source: ./logstash_dev/pipeline/dev_logstash_stand.conf
+        source: ./logstash_common/pipeline/common_logstash_stand.conf
         target: /usr/share/logstash/pipeline/logstash.conf
         read_only: true
     depends_on:
@@ -61,6 +61,7 @@ services:
     restart: always
     build:
       context: logstash_test/
+      dockerfile: ./logstash_common/test.Dockerfile
       args:
         ELK_VERSION: $ELK_VERSION
         TEST_KAFKA_TOPIC_NAME: $TEST_KAFKA_TOPIC_NAME
@@ -88,6 +89,7 @@ services:
     restart: always
     build:
       context: logstash_autotest/
+      dockerfile: ./logstash_common/autotest.Dockerfile
       args:
         ELK_VERSION: $ELK_VERSION
         AUTO_TEST_KAFKA_TOPIC_NAME: $AUTO_TEST_KAFKA_TOPIC_NAME
