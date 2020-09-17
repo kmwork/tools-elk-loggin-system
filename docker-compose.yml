@@ -98,6 +98,10 @@ services:
         source: ./logstash_common/pipeline/common_logstash_stand.conf
         target: /usr/share/logstash/pipeline/logstash.conf
         read_only: true
+      - type: bind
+        source: /etc/hosts
+        target: /etc/hosts
+        read_only: true
     depends_on:
       - elasticsearch
     environment:
