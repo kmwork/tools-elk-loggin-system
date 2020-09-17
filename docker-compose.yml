@@ -3,6 +3,7 @@ version: '3.2'
 services:
   elasticsearch:
     image: elasticsearch:$ELK_VERSION
+    restart: always
     build:
       context: elasticsearch/
       args:
@@ -43,6 +44,10 @@ services:
         source: ./logstash_common/pipeline/common_logstash_stand.conf
         target: /usr/share/logstash/pipeline/logstash.conf
         read_only: true
+      - type: bind
+        source: /etc/hosts
+        target: /etc/hosts
+        read_only: true
     depends_on:
       - elasticsearch
     environment:
@@ -69,6 +74,10 @@ services:
       - type: bind
         source: ./logstash_common/pipeline/common_logstash_stand.conf
         target: /usr/share/logstash/pipeline/logstash.conf
+        read_only: true
+      - type: bind
+        source: /etc/hosts
+        target: /etc/hosts
         read_only: true
     depends_on:
       - elasticsearch
@@ -97,6 +106,10 @@ services:
         source: ./logstash_common/pipeline/common_logstash_stand.conf
         target: /usr/share/logstash/pipeline/logstash.conf
         read_only: true
+      - type: bind
+        source: /etc/hosts
+        target: /etc/hosts
+        read_only: true
     depends_on:
       - elasticsearch
     environment:
@@ -123,6 +136,10 @@ services:
       - type: bind
         source: ./logstash_common/pipeline/common_logstash_stand.conf
         target: /usr/share/logstash/pipeline/logstash.conf
+        read_only: true
+      - type: bind
+        source: /etc/hosts
+        target: /etc/hosts
         read_only: true
     depends_on:
       - elasticsearch
